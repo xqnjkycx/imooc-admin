@@ -1,33 +1,42 @@
 <template>
   <div class="login-container">
-    <el-form class="login-form">
+    <el-form
+      class="login-form"
+      ref="loginFormRef"
+      :model="loginForm"
+      :rules="loginRules"
+    >
       <div class="title-container">
         <h3 class="title">用户登陆</h3>
       </div>
       <el-form-item prop="username">
         <span class="svg-container">
           <!-- 用户名输入框 -->
-          <el-icon>
-            <avatar />
-          </el-icon>
+          <svg-icon icon="https://res.lgdsunday.club/user.svg"></svg-icon>
         </span>
-        <el-input placeholder="username" name="username" type="text" />
+        <el-input
+          placeholder="username"
+          name="username"
+          type="text"
+          v-model="loginForm.username"
+        />
       </el-form-item>
       <!-- 密码输入框 -->
       <el-form-item prop="password">
         <span class="svg-container">
-          <el-icon>
-            <avatar />
-          </el-icon>
+          <svg-icon icon="password"></svg-icon>
         </span>
-        <el-input placeholder="password" name="password" />
-        <span class="show-pwd">
-          <el-icon>
-            <avatar />
-          </el-icon>
+        <el-input
+          placeholder="password"
+          name="password"
+          v-model="loginForm.password"
+          :type="showPassword ? 'text' : 'password'"
+        />
+        <span class="show-pwd" @click="changePasswordStatus">
+          <svg-icon :icon="showPassword ? 'eyes' : 'eyes-close'"></svg-icon>
         </span>
       </el-form-item>
-      <el-button type="primary" class="login-btn" @click="login"
+      <el-button type="primary" class="login-btn" @click="handleLogin"
         >登陆</el-button
       >
     </el-form>
@@ -35,13 +44,84 @@
 </template>
 
 <script lang="ts" setup>
-import { Avatar } from "@element-plus/icons-vue";
+import { ref, reactive, inject } from "vue";
+import { useUserStore } from "@/store/user";
 
-async function login() {
-  const p = new Promise((resolve, reject) => {
-    reject("error error");
+const $tryCatchAwait = inject("$tryCatchAwait") as Function;
+
+// 密码是否明文显示
+const showPassword = ref<boolean>(false);
+function changePasswordStatus(): void {
+  showPassword.value = !showPassword.value;
+}
+
+// 登陆
+const userStore = useUserStore();
+const loading = ref(false);
+function handleLogin() {
+  loginFormRef.value.validate(async (valid: boolean) => {
+    if (!valid) return;
+    loading.value = true;
+    //const res = await userStore.login(loginForm.value);
+    const p = new Promise((resolve, reject) => {
+      reject("err");
+    });
+    console.log($tryCatchAwait);
+    const res = await $tryCatchAwait(p);
   });
-  await p;
+}
+
+// 表单数据源
+interface loginFormData {
+  username: string;
+  password: string;
+}
+const loginForm = ref<loginFormData>({
+  username: "super-admin",
+  password: "123456",
+});
+
+const loginFormRef = ref();
+
+// 验证规则
+interface RuleType {
+  validator: Function;
+  trigger?: string;
+}
+interface loginRulesData {
+  username: Array<RuleType>;
+  password: Array<RuleType>;
+}
+
+const loginRules = reactive<loginRulesData>({
+  username: [
+    {
+      validator: validateUsername,
+      trigger: "blur",
+    },
+  ],
+  password: [
+    {
+      validator: validatePassword,
+      trigger: "blur",
+    },
+  ],
+});
+
+function validateUsername(rule: any, value: any, callback: Function): void {
+  if (value === "") {
+    callback(new Error("用户名不能为空"));
+  } else {
+    callback();
+  }
+}
+
+function validatePassword(rule: any, value: any, callback: Function): void {
+  if (value === "") {
+    callback(new Error("密码不能为空"));
+  } else {
+    callback();
+  }
 }
 </script>
 
@@ -84,10 +164,12 @@ async function login() {
         -webkit-appearance: none;
         border-radius: 0px;
         padding: 12px 5px 12px 15px;
-        color: @light_gray;
         height: 47px;
         caret-color: @cursor;
         box-shadow: none;
+        .el-input__inner {
+          color: #fff;
+        }
       }
     }
   }
