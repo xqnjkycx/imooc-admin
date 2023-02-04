@@ -1,10 +1,10 @@
 import { createApp } from "vue";
 import { awaitTryCatchPlugin } from "./plugins/AwaitErrorCatchPlugin";
 import { SvgIconPlugin } from "./plugins/SvgIconPlugin";
-import "./styles/index.css";
-import router from "./router";
+import "./styles/index.less";
 import App from "./App.vue";
 import { createPinia } from "pinia";
+import router from "./router";
 
 const pinia = createPinia();
 const app = createApp(App);

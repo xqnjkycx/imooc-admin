@@ -46,8 +46,10 @@
 <script lang="ts" setup>
 import { ref, reactive, inject } from "vue";
 import { useUserStore } from "@/store/user";
+import { useRouter } from "vue-router";
 
 const $tryCatchAwait = inject("$tryCatchAwait") as Function;
+const router = useRouter();
 
 // 密码是否明文显示
 const showPassword = ref<boolean>(false);
@@ -62,12 +64,13 @@ function handleLogin() {
   loginFormRef.value.validate(async (valid: boolean) => {
     if (!valid) return;
     loading.value = true;
-    //const res = await userStore.login(loginForm.value);
-    const p = new Promise((resolve, reject) => {
-      reject("err");
-    });
-    console.log($tryCatchAwait);
-    const res = await $tryCatchAwait(p);
+    const res: Array<any> = await $tryCatchAwait(
+      userStore.login(loginForm.value)
+    );
+    if (res[0]) {
+      console.log(res[0]);
+    }
+    router.push("/");
   });
 }
 

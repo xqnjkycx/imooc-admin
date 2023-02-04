@@ -12,3 +12,12 @@ export function loginRequest(data: any): AxiosPromise {
     data,
   });
 }
+
+/**
+ * 获取用户信息
+ */
+export function getUserInfoRequest(): AxiosPromise {
+  return request({
+    url: "/sys/profile",
+  });
+}
