@@ -4,12 +4,7 @@ import { App } from "vue";
 export const awaitTryCatchPlugin = {
   install(app: App) {
     app.provide("$tryCatchAwait", function (p: Promise<any>) {
-      return p
-        .then((res) => ({ error: null, result: res }))
-        .catch((err) => ({
-          error: err,
-          result: null,
-        }));
+      return p.then((res) => [null, res]).catch((err) => [err, null]);
     });
   },
 };

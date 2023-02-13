@@ -3,13 +3,14 @@
 @menuActiveText: #ffffff;
 @subMenuActiveText: #f4f4f5;
 
-@menuBg: #304156;
+@menuBg: #455A64;
 @menuHover: #263445;
 
 @subMenuBg: #1f2d3d;
 @subMenuHover: #001528;
 
 @sideBarWidth: 210px;
+@hideSideBarWidth: 54px;
 
 // Js 与 less 共享变量，在less中通过 :export 进行导出 ， 在js中可通过 ES Module 进行导入
 :export {
@@ -20,6 +21,7 @@
   subMenuBg: @subMenuBg;
   subMenuHover: @subMenuHover;
   sideBarWidth: @sideBarWidth;
+  hideSideBarWidth:@hideSideBarWidth;
   menuText: @menuText;
 }
 

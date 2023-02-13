@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { loginRequest, getUserInfoRequest } from "@/api/system";
-import { setItem, getItem } from "@/utils/tools/storage";
+import { setItem, getItem, removeAllItem } from "@/utils/tools/storage";
+import { setTimeStamp } from "@/utils/tools/auth";
 import { TOKEN } from "@/utils/tools/contrast";
 import md5 from "md5";
 
@@ -20,6 +21,9 @@ export const useUserStore = defineStore("user", {
     setToken(token: string) {
       setItem(TOKEN, token);
     },
+    setUserInfo(userInfo: Object) {
+      this.userInfo = userInfo;
+    },
     // 请求登陆
     login(userInfo: userInfo) {
       const { username, password } = userInfo;
@@ -30,11 +34,21 @@ export const useUserStore = defineStore("user", {
         })
           .then((res: any) => {
             this.setToken(res.token);
+            setTimeStamp();
             resolve(res);
           })
           .catch((err) => {
             reject(err);
           });
+      });
+    },
+    // 退出登录
+    logout() {
+      return new Promise((resolve, reject) => {
+        this.setToken("");
+        this.setUserInfo({});
+        removeAllItem();
+        resolve(undefined);
       });
     },
     // 获取用户信息

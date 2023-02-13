@@ -21,6 +21,6 @@ export const removeItem = (key: string) => {
   window.localStorage.removeItem(key);
 };
 
-export const removeAllItem = (key: string) => {
+export const removeAllItem = () => {
   window.localStorage.clear();
 };

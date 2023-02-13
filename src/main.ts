@@ -3,8 +3,8 @@ import { awaitTryCatchPlugin } from "./plugins/AwaitErrorCatchPlugin";
 import { SvgIconPlugin } from "./plugins/SvgIconPlugin";
 import "./styles/index.less";
 import App from "./App.vue";
-import { createPinia } from "pinia";
 import router from "./router";
+import { createPinia } from "pinia";
 
 const pinia = createPinia();
 const app = createApp(App);

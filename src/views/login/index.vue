@@ -50,6 +50,7 @@ import { useRouter } from "vue-router";
 
 const $tryCatchAwait = inject("$tryCatchAwait") as Function;
 const router = useRouter();
+const userStore = useUserStore();
 
 // 密码是否明文显示
 const showPassword = ref<boolean>(false);
@@ -58,17 +59,16 @@ function changePasswordStatus(): void {
 }
 
 // 登陆
-const userStore = useUserStore();
 const loading = ref(false);
 function handleLogin() {
   loginFormRef.value.validate(async (valid: boolean) => {
     if (!valid) return;
     loading.value = true;
-    const res: Array<any> = await $tryCatchAwait(
+    const [loginError, loginRes]: Array<any> = await $tryCatchAwait(
       userStore.login(loginForm.value)
     );
-    if (res[0]) {
-      console.log(res[0]);
+    if (loginError) {
+      console.log(loginError);
     }
     router.push("/");
   });
